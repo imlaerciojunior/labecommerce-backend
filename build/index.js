@@ -1,7 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("./database");
-console.log("projeto rodando");
-console.table(database_1.users);
-console.table(database_1.products);
-//# sourceMappingURL=index.js.map
+console.log(database_1.users);
+console.log(database_1.products);
+const creatUserResult = (0, database_1.createUser)("u003", "Laércio", "laercio@email.com", "laercio123456");
+console.log(creatUserResult);
+const userList = (0, database_1.getAllUsers)();
+console.log(userList);
+const creatProductResult = (0, database_1.createProduct)("prod003", "SSD gamer", 349.99, "Acelere seu sistema com velocidades incríveis de leitura e gravação.", "https://images.unsplash.com/photo");
+console.log(creatProductResult);
+const productsList = (0, database_1.getAllProducts)();
+console.log(productsList);
+const searchResult = (0, database_1.searchProductsByName)("gamer");
+console.log(searchResult);
