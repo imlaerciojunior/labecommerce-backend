@@ -1,6 +1,7 @@
 import { TProducts, TUsers } from "./types";
 
-export const users: TUsers[] =  [
+//USUARIOS
+export const users: TUsers[] = [
   {
     id: "u001",
     name: "Bruno",
@@ -16,16 +17,9 @@ export const users: TUsers[] =  [
     password: "girafa123456",
     createdAt: new Date().toISOString(),
   },
-
-  {
-    id: "u003",
-    name: "Junior",
-    email: "junior@email.com",
-    password: "junior123456",
-    createdAt: new Date().toISOString(),
-  },
 ];
 
+//PRODUTOS
 export const products: TProducts[] = [
   {
     id: "prod001",
@@ -43,3 +37,40 @@ export const products: TProducts[] = [
     imageUrl: "https://picsum.photos/seed/Monitor/400",
   },
 ];
+
+//---------------------------função para criar um novo usuario---------------------------
+export function createUser(id: string, name: string, email: string, password: string): string {
+
+  const createdAt: string = new Date().toISOString();
+  const newUser: TUsers = { id, name, email, password, createdAt };
+  users.push(newUser);
+  return "Cadastro realizado com sucesso";
+}
+
+//função para retornar todos os usuarios ja existentes
+export function getAllUsers(): TUsers[] {
+  return users;
+}
+
+//------------------------função para criar um novo produto--------------------------
+export function createProduct(id: string, name: string, price: number,description: string,imageUrl: string): string {
+
+  const newProduct: TProducts = { id, name, price, description, imageUrl };
+  products.push(newProduct);
+  return "Produto cadastrado com sucesso";
+}
+
+//função para retornar todos os produtos da lista de produtos
+export function getAllProducts(): TProducts[] {
+  return products;
+}
+
+
+//-----------------------função para procurar por nome-------------------------------
+export function searchProductsByName(name: string): TProducts[] {
+  const searchTerm = name.toLowerCase();
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm)
+  );
+  return filteredProducts;
+}
