@@ -74,3 +74,5 @@ export function searchProductsByName(name: string): TProducts[] {
   );
   return filteredProducts;
 }
+
+
