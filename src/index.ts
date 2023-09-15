@@ -129,3 +129,95 @@ app.post("/products", (req: Request, res: Response) => {
 
   res.status(201).send("Produto cadastrado com sucesso");
 });
+
+
+//-------------------------excluir usuario------------------
+
+app.delete("/users/:id", (req:Request, res: Response) =>{
+  const id = req.params.id
+  const indexToDelete = users.findIndex((user) => user.id === id)
+
+  if(indexToDelete >= 0){
+      users.splice(indexToDelete, 1)
+  } else{
+      console.log("deu ruim, não deletou")
+  }
+
+  res.status(200).send("User apagado com sucesso")
+})
+
+
+//-------------------------excluir produtos--------------------
+
+
+app.delete("/products/:id", (req:Request, res: Response) =>{
+  const id = req.params.id
+  const indexToDelete = products.findIndex((product) => product.id === id)
+
+  if(indexToDelete >= 0){
+      products.splice(indexToDelete, 1)
+  } else{
+      console.log("deu ruim, não deletou")
+  }
+
+  res.status(200).send("Produto apagado com sucesso")
+})
+
+//----------------------Editar produtos----------------------
+
+app.put("/products/:id", (req: Request, res: Response) => {
+  const id = req.params.id 
+
+const newId = req.body.id as string | undefined
+const newProductName = req.body.name as string | undefined
+const newPrice = req.body.price as number | undefined
+const newDescription = req.body.description as string | undefined
+const newImageUrl = req.body.imahge as string | undefined
+
+
+const newProduct = products.find((item)=>item.id === id)
+
+if (newProduct) {
+  newProduct.id = newId || newProduct.id
+  newProduct.name = newProductName || newProduct.name
+  newProduct.price = newPrice || newProduct.price
+  newProduct.imageUrl = newImageUrl || newProduct.imageUrl
+  newProduct.description = newDescription || newProduct.description
+
+}
+
+  res.status(200).send({message:"alteração feita com sucesso"})
+})
+
+
+
+
+// app.put("/products/:id", (req: Request, res: Response) => {
+//   const id = req.params.id
+
+//   const newName = req.body.name as string | undefined
+//   const newPrice = req.body.price as number | undefined
+//   const newDescription = req.body.description as string | undefined
+//   const newImageUrl = req.body.imageUrl as string | undefined
+
+//   const product = products.find((product) => product.id === id)
+
+//   product.name = newName || product.name
+//   product.description = newDescription || product.description
+//   product.imageUrl = newImageUrl || product.imageUrl
+
+//   // if (newName !== undefined) {
+//   //   product.name = newName;
+//   // }
+//   // if (newDescription !== undefined) {
+//   //   product.description = newDescription;
+//   // }
+//   // if (newImageUrl !== undefined) {
+//   //   product.imageUrl = newImageUrl;
+//   // }
+
+//   //função por ser um numero
+//   product.price = isNaN(newPrice) ? product.price : newPrice
+
+//   res.status(200).send("Produto atualizado com sucesso")
+// })
