@@ -65,159 +65,254 @@ const searchResult: TProducts[] = searchProductsByName("gamer");
 //--------------------------USANDO ENDPOINT--------------------
 //retorna usuarios cadastrados
 app.get("/users", (req: Request, res: Response) => {
+  try{
   const resultUsers: TUsers[] = users;
-
+  
   res.status(200).send(resultUsers);
+
+  } catch(error){ 
+    res.send(400)   
+  }
 });
 
 //retorna produtos cadastrados
 app.get("/products", (req: Request, res: Response) => {
-  const resultProducts: TProducts[] = products;
-
-  res.status(200).send(resultProducts);
+  
+  try{
+    const resultProducts: TProducts[] = products;
+    res.status(200).send(resultProducts);
+    
+  } catch(error){
+    res.send(400)
+  }
 });
 
 //retorna produtos filtrados
-app.get("/products/search", (req: Request, res: Response) => {
-  const query: string | undefined = req.query.q as string | undefined;
+app.get("/products/search", (req: Request, res: Response): void => {
+  try {
+    const query: string = req.query.q as string;
 
-  if (query === undefined) {
-    return res.status(200).send(products);
+    if(query.length === 0) {
+      res.statusCode = 404
+      throw new Error('Query deve possuir pelo menos um caractere');
+    }
+
+    const productsByName: TProducts[] = products.filter(
+      (product) => product.name.toLowerCase().startsWith(query.toLowerCase())
+    );
+
+    if (productsByName.length === 0) {
+      res.statusCode = 404
+      throw new Error(`Nenhum produto encontrado para a query '${query}'`);
+    }
+
+    res.status(200).send(productsByName);
+
+  } catch (error) {
+    if(error instanceof Error) {
+      res.send(error.message);
+    } else {
+      res.send('Erro: a query deve possuir pelo menos um caractere');
+    }
   }
-
-  const productsByName: TProducts[] | undefined = products.filter(
-    (products) => products.name.toLowerCase() === query.toLowerCase()
-  );
-
-  if (!productsByName.length) {
-    return res.status(200).send(products);
-  }
-
-  res.status(200).send(productsByName);
 });
 
 //------------------------criando um novo usuario----------------------
 
 app.post("/users", (req: Request, res: Response) => {
-  const { id, name, email, password }: TUsers = req.body;
 
-  const newUser: TUsers = {
-    id,
-    name,
-    email,
-    password,
-    createdAt: new Date().toISOString(),
-  };
-  users.push(newUser);
+  try {
+    const { id, name, email, password }: TUsers = req.body;
 
-  res.status(201).send("Cadastro realizado com sucesso");
-});
+    if (typeof id !== "string"){
+      res.statusCode = 400
+      throw new Error("Id invalido.");
+    }
+
+    if(typeof name !== "string"){
+      res.statusCode = 400
+      throw new Error("Name invalido.");
+    }
+
+    if (typeof email !== "string"){
+      res.statusCode = 400
+      throw new Error("Email invalido.");
+    }
+
+    if(typeof password !== "string"){
+      res.statusCode = 400
+      throw new Error("Password invalido.");
+    }
+
+     // Verificar se um usuário com o mesmo ID ou e-mail já existe
+     const existingUserById: TUsers | undefined = users.find((user) => user.id === id);
+     const existingUserByEmail: TUsers | undefined = users.find((user) => user.email === email);
+ 
+     if (existingUserById) {
+        res.statusCode = 400
+        throw new Error("Já existe um usuário com o mesmo ID.");
+     }
+ 
+     if (existingUserByEmail) {
+        res.statusCode = 400
+       throw new Error("Já existe um usuário com o mesmo e-mail.");
+     }
+
+    const newUser: TUsers = {
+      id,
+      name,
+      email,
+      password,
+      createdAt: new Date().toISOString(),
+    };
+    users.push(newUser);
+
+    res.status(201).send("Cadastro realizado com sucesso");
+  }
+   catch (error) {
+    if(error instanceof Error){
+      res.send(error.message) 
+   }
+  }
+})
 
 //------------------------criando um novo produto-----------------
 
 app.post("/products", (req: Request, res: Response) => {
-  const { id, name, price, description, imageUrl }: TProducts = req.body;
 
-  const newProduct: TProducts = {
-    id,
-    name,
-    price,
-    description,
-    imageUrl,
-  };
-  products.push(newProduct);
+  try {
+    const { id, name, price, description, imageUrl }: TProducts = req.body;
 
-  res.status(201).send("Produto cadastrado com sucesso");
+    if (typeof id !== "string"){
+      res.statusCode = 400
+      throw new Error("Id invalido.");
+    }
+
+    if(typeof name !== "string"){
+      res.statusCode = 400
+      throw new Error("Name invalido.");
+    }
+
+    if (typeof price !== "number"){
+      res.statusCode = 400
+      throw new Error("price invalido.");
+    }
+
+    if(typeof description !== "string"){
+      res.statusCode = 400
+      throw new Error("description invalido.");
+    }
+
+    if(typeof imageUrl !== "string"){
+      res.statusCode = 400
+      throw new Error("imageUrl invalido.");
+    }
+    
+    //Verificar se um produto com o mesmo ID existe
+    const existingProductById: TProducts | undefined = products.find((product) => product.id === id);
+
+    if(existingProductById){
+      res.statusCode = 400
+      throw new Error("Já existe um produto com o mesmo ID.");
+    }
+
+    const newProduct: TProducts = {
+      id,
+      name,
+      price,
+      description,
+      imageUrl,
+    };
+    products.push(newProduct);
+
+    res.status(201).send("Produto cadastrado com sucesso");
+  } catch (error) {
+    if(error instanceof Error){
+      res.send(error.message) 
+   }
+  }
+  
 });
-
 
 //-------------------------excluir usuario------------------
 
 app.delete("/users/:id", (req:Request, res: Response) =>{
-  const id = req.params.id
-  const indexToDelete = users.findIndex((user) => user.id === id)
 
-  if(indexToDelete >= 0){
-      users.splice(indexToDelete, 1)
-  } else{
-      console.log("deu ruim, não deletou")
+  try {
+    const id: string = req.params.id
+    const indexToDelete: number = users.findIndex((user) => user.id === id)
+
+    if(indexToDelete >= 0){
+        users.splice(indexToDelete, 1)
+        res.status(200).send({message: "User apagado com sucesso"})
+    } else{
+      res.status(400).send({message: "usuario não encontrado"})
+    }
+
+  } catch (error) {
+    if(error instanceof Error){
+      res.send(error.message) 
+   }
   }
-
-  res.status(200).send("User apagado com sucesso")
+  
 })
-
 
 //-------------------------excluir produtos--------------------
 
-
 app.delete("/products/:id", (req:Request, res: Response) =>{
-  const id = req.params.id
-  const indexToDelete = products.findIndex((product) => product.id === id)
 
-  if(indexToDelete >= 0){
-      products.splice(indexToDelete, 1)
-  } else{
-      console.log("deu ruim, não deletou")
+  try {
+    const id: string = req.params.id
+    const indexToDelete: number = products.findIndex((product) => product.id === id)
+
+    if(indexToDelete >= 0){
+        products.splice(indexToDelete, 1)
+        res.status(200).send({message: "produto apagado com sucesso"})
+    } else{
+      res.status(400).send({message: "produto não encontrado"})
+    }
+  } catch (error) {
+    if(error instanceof Error){
+      res.send(error.message) 
+   }
   }
-
-  res.status(200).send("Produto apagado com sucesso")
 })
 
 //----------------------Editar produtos----------------------
 
 app.put("/products/:id", (req: Request, res: Response) => {
-  const id = req.params.id 
 
-const newId = req.body.id as string | undefined
-const newProductName = req.body.name as string | undefined
-const newPrice = req.body.price as number | undefined
-const newDescription = req.body.description as string | undefined
-const newImageUrl = req.body.imahge as string | undefined
+  try {
+    const id: string = req.params.id 
 
+     // Validar se o produto existe antes de editar
+     const indexProduct: number = products.findIndex((product) => product.id === id);
 
-const newProduct = products.find((item)=>item.id === id)
+     if (indexProduct === -1) {
+       return res.status(404).send({ mensagem: "Produto não encontrado" });
+     }
 
-if (newProduct) {
-  newProduct.id = newId || newProduct.id
-  newProduct.name = newProductName || newProduct.name
-  newProduct.price = newPrice || newProduct.price
-  newProduct.imageUrl = newImageUrl || newProduct.imageUrl
-  newProduct.description = newDescription || newProduct.description
+    const newId = req.body.id as string | undefined
+    const newProductName = req.body.name as string | undefined
+    const newPrice = req.body.price as number | undefined
+    const newDescription = req.body.description as string | undefined
+    const newImageUrl = req.body.imahge as string | undefined
 
-}
+    const newProduct: TProducts | undefined = products.find((item)=>item.id === id)
 
-  res.status(200).send({message:"alteração feita com sucesso"})
+    if (newProduct) {
+      newProduct.id = newId || newProduct.id
+      newProduct.name = newProductName || newProduct.name
+      newProduct.price = newPrice || newProduct.price
+      newProduct.imageUrl = newImageUrl || newProduct.imageUrl
+      newProduct.description = newDescription || newProduct.description
+    }
+
+    res.status(200).send({message:"alteração feita com sucesso"})
+  } catch (error) {
+    if(error instanceof Error){
+      res.send(error.message) 
+   }
+  }
+
 })
-
-
-
-
-// app.put("/products/:id", (req: Request, res: Response) => {
-//   const id = req.params.id
-
-//   const newName = req.body.name as string | undefined
-//   const newPrice = req.body.price as number | undefined
-//   const newDescription = req.body.description as string | undefined
-//   const newImageUrl = req.body.imageUrl as string | undefined
-
-//   const product = products.find((product) => product.id === id)
-
-//   product.name = newName || product.name
-//   product.description = newDescription || product.description
-//   product.imageUrl = newImageUrl || product.imageUrl
-
-//   // if (newName !== undefined) {
-//   //   product.name = newName;
-//   // }
-//   // if (newDescription !== undefined) {
-//   //   product.description = newDescription;
-//   // }
-//   // if (newImageUrl !== undefined) {
-//   //   product.imageUrl = newImageUrl;
-//   // }
-
-//   //função por ser um numero
-//   product.price = isNaN(newPrice) ? product.price : newPrice
-
-//   res.status(200).send("Produto atualizado com sucesso")
-// })
