@@ -16,17 +16,11 @@ SELECT *FROM users;
 DROP TABLE users;
 
 -- INSERIR OS NOVOS USUARIOS
-INSERT INTO users (id, name, email, password, created_at)
-VALUES('u003', 'Shoyo', 'shoyo@email.com', 'whiscassache', strftime('%Y-%m-%dT%H:%M:%S', 'now'))
-
-INSERT INTO users (id, name, email, password, created_at)
-VALUES('u004', 'Biju', 'biju@email.com', 'boladepelo', strftime('%Y-%m-%dT%H:%M:%S', 'now'))
-
-INSERT INTO users (id, name, email, password, created_at)
-VALUES('u005', 'Bruno', 'bruno@email.com', 'meumaridolindo', strftime('%Y-%m-%dT%H:%M:%S', 'now'))
-
-INSERT INTO users (id, name, email, password, created_at)
-VALUES('u006', 'Carol', 'carol@email.com', 'novaeuropa', strftime('%Y-%m-%dT%H:%M:%S', 'now'))
+INSERT INTO users (id, name, email, password, created_at) VALUES
+('u003', 'Shoyo', 'shoyo@email.com', 'whiscassache', strftime('%Y-%m-%dT%H:%M:%S', 'now')),
+('u004', 'Biju', 'biju@email.com', 'boladepelo', strftime('%Y-%m-%dT%H:%M:%S', 'now')),
+('u005', 'Bruno', 'bruno@email.com', 'meumaridolindo', strftime('%Y-%m-%dT%H:%M:%S', 'now')),
+('u006', 'Carol', 'carol@email.com', 'novaeuropa', strftime('%Y-%m-%dT%H:%M:%S', 'now'));
 
 -- TABELA DE PRODUTOS
 CREATE TABLE products (
@@ -43,25 +37,14 @@ SELECT *FROM products;
 -- EXCLUI TABELA DE PRODUTOS
 DROP TABLE products;
 
-
 -- INSERE NOVOS PRODUTOS
-INSERT INTO products (id, name, price, description, image_url)
-VALUES('prod003', 'robo aspirador', 1234.00, 'Robô Aspirador de Pó KaBuM! Smart 700, Mapeamento IR 360º, Controle via Aplicativo, Google Assistant e Alexa', 'https://images.kabum.com.br/produtos/fotos/155444/aspirador-de-po-robo-ir-360-kabum-smart-700-preto_1628768893_m.jpg')
-
-INSERT INTO products (id, name, price, description, image_url)
-VALUES('prod004', 'placa de video gamer', 1800.00, 'Placa de Vídeo MSI NVIDIA GeForce RTX 3060 Ventus', 'https://images7.kabum.com.br/produtos/fotos/384627/placa-de-video-msi-nvidia-geforce-rtx-3060-ventus-2x-12gb-gddr6-dlss-ray-tracing-912-v397-272_1663850312_m.jpg')
-
-INSERT INTO products (id, name, price, description, image_url)
-VALUES('prod005', 'playstation 5', 3500.00, 'Console Sony Playstation 5, Edição Digital', 'https://images.kabum.com.br/produtos/fotos/238670/console-sony-playstation-5-edicao-digital_1634132113_m.jpg')
-
-INSERT INTO products (id, name, price, description, image_url)
-VALUES('prod006', 'Macbook Pro Apple 16', 12034.00, 'macbook pro de 16 polegadas', 'https://images2.kabum.com.br/produtos/fotos/sync_mirakl/479192/Macbook-Pro-Apple-16-Chip-M1-Max-32GB-SSD-1TB-Cinza-Espacial-Mk1a3bz-A_1694541516_m.jpg')
-
-INSERT INTO products (id, name, price, description, image_url)
-VALUES('prod007', 'Samsung Galaxy Z Flip5', 6234.00, 'Smartphone Samsung Galaxy Z Flip5 512gb 5g Tela Dobrável 6.7 Câmera Dupla 12mp Câmera Selfie 10mp Dual Chip Android 13, Grafite', 'https://images.kabum.com.br/produtos/fotos/magalu/480251/Smartphone-Samsung-Z-Flip-5-512GB-Grafite-5G-Snapdragon-8GB-RAM-6-7-C-m-Dupla-Selfie-10MP-Dual-Chip_1692195175_m.jpg')
-
-INSERT INTO products (id, name, price, description, image_url)
-VALUES('prod008', 'XBOX 360 one', 2600.00, 'Espaço de armazenamento: 512 Gb Conexões: HDMI-In/Out, Portas usb, Wi-Fi embutido Tensão: Bivolt', 'https://images-americanas.b2w.io/produtos/3052435356/imagens/console-xbox-serie-s-ssd512gb-1controle-rrs-00006/3052435364_1_xlarge.jpg')
+INSERT INTO products (id, name, price, description, image_url) VALUES
+('prod003', 'robo aspirador', 1234.00, 'Robô Aspirador de Pó KaBuM! Smart 700, Mapeamento IR 360º, Controle via Aplicativo, Google Assistant e Alexa', 'https://images.kabum.com.br/produtos/fotos/155444/aspirador-de-po-robo-ir-360-kabum-smart-700-preto_1628768893_m.jpg'),
+('prod004', 'placa de video gamer', 1800.00, 'Placa de Vídeo MSI NVIDIA GeForce RTX 3060 Ventus', 'https://images7.kabum.com.br/produtos/fotos/384627/placa-de-video-msi-nvidia-geforce-rtx-3060-ventus-2x-12gb-gddr6-dlss-ray-tracing-912-v397-272_1663850312_m.jpg'),
+('prod005', 'playstation 5', 3500.00, 'Console Sony Playstation 5, Edição Digital', 'https://images.kabum.com.br/produtos/fotos/238670/console-sony-playstation-5-edicao-digital_1634132113_m.jpg'),
+('prod006', 'Macbook Pro Apple 16', 12034.00, 'macbook pro de 16 polegadas', 'https://images2.kabum.com.br/produtos/fotos/sync_mirakl/479192/Macbook-Pro-Apple-16-Chip-M1-Max-32GB-SSD-1TB-Cinza-Espacial-Mk1a3bz-A_1694541516_m.jpg'),
+('prod007', 'Samsung Galaxy Z Flip5', 6234.00, 'Smartphone Samsung Galaxy Z Flip5 512gb 5g Tela Dobrável 6.7 Câmera Dupla 12mp Câmera Selfie 10mp Dual Chip Android 13, Grafite', 'https://images.kabum.com.br/produtos/fotos/magalu/480251/Smartphone-Samsung-Z-Flip-5-512GB-Grafite-5G-Snapdragon-8GB-RAM-6-7-C-m-Dupla-Selfie-10MP-Dual-Chip_1692195175_m.jpg'),
+('prod008', 'XBOX 360 one', 2600.00, 'Espaço de armazenamento: 512 Gb Conexões: HDMI-In/Out, Portas usb, Wi-Fi embutido Tensão: Bivolt', 'https://images-americanas.b2w.io/produtos/3052435356/imagens/console-xbox-serie-s-ssd512gb-1controle-rrs-00006/3052435364_1_xlarge.jpg');
 
 -- BUSCA POR NOME GAME DOS PRODUTOS
 SELECT * FROM products
@@ -84,3 +67,35 @@ SET
   description = 'Descrição do Produto 7',
   image_url = 'novaimagemurl.jpg'
 WHERE id = 'prod005';
+
+
+-- TABELA DE PEDIDOS
+
+CREATE TABLE purchases(
+  id TEXT PRIMARY KEY UNIQUE NOT NULL,
+  buyer TEXT NOT NULL,
+  total_price REAL NOT NULL,
+  created_at DATETIME DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
+  buyer_id TEXT UNIQUE NOT NULL,
+  FOREIGN KEY (buyer_id) REFERENCES users(id)
+);
+
+DROP TABLE purchases;
+
+-- INTRODUZIR PEDIDO
+INSERT INTO purchases VALUES
+('b001', 'Shoyo', 100, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), 'u003'),
+('b002', 'Biju', 300, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), 'u004'),
+('b003', 'Bruno', 110, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), 'u005'),
+('b004', 'Carol', 200, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'),'u006');
+
+SELECT * FROM purchases;
+
+-- EDITAR PEDIDO
+UPDATE purchases
+SET total_price = 700 WHERE buyer_id = 'u003'
+
+-- JUNÇÃO DAS TABELAS
+
+SELECT purchases.id AS idCompra, users.id AS idUser, users.name, users.email, purchases.total_price, purchases.created_at FROM purchases
+INNER JOIN users ON users.id = purchases.buyer_id;
