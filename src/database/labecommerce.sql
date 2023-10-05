@@ -78,16 +78,18 @@ CREATE TABLE purchases(
   created_at DATETIME DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
   buyer_id TEXT UNIQUE NOT NULL,
   FOREIGN KEY (buyer_id) REFERENCES users(id)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
 );
 
 DROP TABLE purchases;
 
 -- INTRODUZIR PEDIDO
 INSERT INTO purchases VALUES
-('b001', 'Shoyo', 100, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), 'u003'),
-('b002', 'Biju', 300, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), 'u004'),
-('b003', 'Bruno', 110, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), 'u005'),
-('b004', 'Carol', 200, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'),'u006');
+('p001', 'Shoyo', 100, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), 'u003'),
+('p002', 'Biju', 300, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), 'u004'),
+('p003', 'Bruno', 110, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), 'u005'),
+('p004', 'Carol', 200, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'),'u006');
 
 SELECT * FROM purchases;
 
@@ -99,3 +101,25 @@ SET total_price = 700 WHERE buyer_id = 'u003'
 
 SELECT purchases.id AS idCompra, users.id AS idUser, users.name, users.email, purchases.total_price, purchases.created_at FROM purchases
 INNER JOIN users ON users.id = purchases.buyer_id;
+
+-- CRIANDO TABELA DE RELAÇÕES 
+
+CREATE TABLE purchases_products(
+  purchase_id TEXT NOT NULL,
+  product_id TEXT NOT NULL,
+  quantity INTEGER NOT NULL,
+  FOREIGN KEY (purchase_id) REFERENCES purchases (id),
+  FOREIGN KEY (product_id) REFERENCES products (id)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
+);
+
+INSERT INTO purchases_products VALUES
+('p001', 'prod003', 1),
+('p001', 'prod005', 1 ),
+('p002', 'prod007', 2);
+
+SELECT *
+FROM purchases_products
+INNER JOIN purchases ON purchases_products.purchase_id = purchases.id
+INNER JOIN products ON purchases_products.product_id = products.id;
