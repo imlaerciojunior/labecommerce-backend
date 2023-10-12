@@ -1,12 +1,12 @@
 -- Active: 1695690091017@@127.0.0.1@1433
 
 -- TABELA DE USUARIOS
-CREATE TABLE users(
+CREATE TABLE users (
     id TEXT PRIMARY KEY UNIQUE NOT NULL,
     name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
-    created_at TEXT NOT NULL 
+    created_at DATETIME DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))
 );
 
 -- SELECIONA TODOS OS USUARIOS
@@ -16,11 +16,11 @@ SELECT *FROM users;
 DROP TABLE users;
 
 -- INSERIR OS NOVOS USUARIOS
-INSERT INTO users (id, name, email, password, created_at) VALUES
-('u003', 'Shoyo', 'shoyo@email.com', 'whiscassache', strftime('%Y-%m-%dT%H:%M:%S', 'now')),
-('u004', 'Biju', 'biju@email.com', 'boladepelo', strftime('%Y-%m-%dT%H:%M:%S', 'now')),
-('u005', 'Bruno', 'bruno@email.com', 'meumaridolindo', strftime('%Y-%m-%dT%H:%M:%S', 'now')),
-('u006', 'Carol', 'carol@email.com', 'novaeuropa', strftime('%Y-%m-%dT%H:%M:%S', 'now'));
+INSERT INTO users (id, name, email, password) VALUES
+('u003', 'Shoyo', 'shoyo@email.com', 'whiscassache'),
+('u004', 'Biju', 'biju@email.com', 'boladepelo'),
+('u005', 'Bruno', 'bruno@email.com', 'meumaridolindo'),
+('u006', 'Carol', 'carol@email.com', 'novaeuropa');
 
 -- TABELA DE PRODUTOS
 CREATE TABLE products (
@@ -71,31 +71,35 @@ WHERE id = 'prod005';
 
 -- TABELA DE PEDIDOS
 
-CREATE TABLE purchases(
-  id TEXT PRIMARY KEY UNIQUE NOT NULL,
-  buyer TEXT NOT NULL,
-  total_price REAL NOT NULL,
-  created_at DATETIME DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
-  buyer_id TEXT UNIQUE NOT NULL,
-  FOREIGN KEY (buyer_id) REFERENCES users(id)
-  ON UPDATE CASCADE
-  ON DELETE CASCADE
+CREATE TABLE purchases (
+    id TEXT PRIMARY KEY UNIQUE NOT NULL,
+    buyer_id TEXT NOT NULL,
+    total_price REAL NOT NULL,
+    product_id TEXT, -- Adicionando a coluna product_id
+    product_description TEXT,
+    created_at DATETIME DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
+    FOREIGN KEY (buyer_id) REFERENCES users(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+    ON UPDATE CASCADE -- efeito cascata ao atualizar id na tabela users
+		ON DELETE CASCADE -- efeito cascata ao atualizar id na tabela users
 );
 
 DROP TABLE purchases;
 
 -- INTRODUZIR PEDIDO
-INSERT INTO purchases VALUES
-('p001', 'Shoyo', 100, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), 'u003'),
-('p002', 'Biju', 300, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), 'u004'),
-('p003', 'Bruno', 110, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'), 'u005'),
-('p004', 'Carol', 200, strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'),'u006');
+INSERT INTO purchases (id, buyer_id, total_price, product_id, product_description)
+VALUES
+('p001', 'u003', 100,'prod003', 'Robô Aspirador de Pó KaBuM! Smart 700, Mapeamento IR 360º, Controle via Aplicativo, Google Assistant e Alexa'),
+('p002', 'u004', 300, 'prod003','Robô Aspirador de Pó KaBuM! Smart 700, Mapeamento IR 360º, Controle via Aplicativo, Google Assistant e Alexa'),
+('p003', 'u005', 110, 'prod003', 'Robô Aspirador de Pó KaBuM! Smart 700, Mapeamento IR 360º, Controle via Aplicativo, Google Assistant e Alexa'),
+('p004', 'u006', 200,'prod003', 'Robô Aspirador de Pó KaBuM! Smart 700, Mapeamento IR 360º, Controle via Aplicativo, Google Assistant e Alexa');
 
 SELECT * FROM purchases;
 
 -- EDITAR PEDIDO
 UPDATE purchases
-SET total_price = 700 WHERE buyer_id = 'u003'
+SET total_price = 700 
+WHERE buyer_id = 'u003';
 
 -- JUNÇÃO DAS TABELAS
 
@@ -104,14 +108,14 @@ INNER JOIN users ON users.id = purchases.buyer_id;
 
 -- CRIANDO TABELA DE RELAÇÕES 
 
-CREATE TABLE purchases_products(
+CREATE TABLE purchases_products (
   purchase_id TEXT NOT NULL,
   product_id TEXT NOT NULL,
   quantity INTEGER NOT NULL,
   FOREIGN KEY (purchase_id) REFERENCES purchases (id),
   FOREIGN KEY (product_id) REFERENCES products (id)
-  ON UPDATE CASCADE
-  ON DELETE CASCADE
+  ON UPDATE CASCADE -- efeito cascata ao atualizar id na tabela users
+	ON DELETE CASCADE -- efeito cascata ao atualizar id na tabela users
 );
 
 INSERT INTO purchases_products VALUES
